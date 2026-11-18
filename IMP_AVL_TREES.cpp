@@ -1,4 +1,3 @@
-// Implementation of AVL Trees (self-balancing BST)
 #include <iostream>
 using namespace std;
 
@@ -9,174 +8,158 @@ struct Node {
     int height;
 };
 
-int height(Node* node) {
-    if (node == NULL) return 0;
+int height(Node* node){
+    if(node == nullptr) return 0;
     return node->height;
 }
 
-int maxOf(int a, int b) {
-    return (a > b) ? a : b;
+Node* newNode(int data){
+    Node* node = new Node();
+    node->data = data;
+    node->left = nullptr;
+    node->right = nullptr;
+    node->height = 1;
+    return node;
 }
 
-Node* createNode(int value) {
-    Node* newNode = new Node;
-    newNode->data = value;
-    newNode->left = NULL;
-    newNode->right = NULL;
-    newNode->height = 1;  // new node is a leaf
-    return newNode;
-}
-
-int getBalance(Node* node) {
-    if (node == NULL) return 0;
+int getBalance(Node* node){
+    if(node == nullptr) return 0;
     return height(node->left) - height(node->right);
 }
 
-void updateHeight(Node* node) {
-    node->height = 1 + maxOf(height(node->left), height(node->right));
+void updateHeight(Node* node){
+    node->height = 1 + max(height(node->left), height(node->right));
 }
 
-// Right rotation: left child x becomes the new root of this subtree
-// (used when the tree is too heavy on the left side)
-Node* rightRotate(Node* y) {
+Node* rightRotate(Node* y){
     Node* x = y->left;
-    Node* T2 = x->right;
+    Node* t = x->right;
 
     x->right = y;
-    y->left = T2;
+    y->left = t;
 
     updateHeight(y);
     updateHeight(x);
     return x;
 }
 
-// Left rotation: right child y becomes the new root of this subtree
-// (used when the tree is too heavy on the right side)
-Node* leftRotate(Node* x) {
+Node* leftRotate(Node* x){
     Node* y = x->right;
-    Node* T2 = y->left;
+    Node* t = y->left;
 
     y->left = x;
-    x->right = T2;
+    x->right = t;
 
     updateHeight(x);
     updateHeight(y);
     return y;
 }
 
-// fix the balance of a node after insert/delete
-Node* balance(Node* node) {
+Node* balance(Node* node){
     updateHeight(node);
     int bf = getBalance(node);
 
-    // Left Left case
-    if (bf > 1 && getBalance(node->left) >= 0) {
+    // LL
+    if(bf > 1 && getBalance(node->left) >= 0){
         return rightRotate(node);
     }
-    // Left Right case
-    if (bf > 1 && getBalance(node->left) < 0) {
+    // LR
+    if(bf > 1 && getBalance(node->left) < 0){
         node->left = leftRotate(node->left);
         return rightRotate(node);
     }
-    // Right Right case
-    if (bf < -1 && getBalance(node->right) <= 0) {
+    // RR
+    if(bf < -1 && getBalance(node->right) <= 0){
         return leftRotate(node);
     }
-    // Right Left case
-    if (bf < -1 && getBalance(node->right) > 0) {
+    // RL
+    if(bf < -1 && getBalance(node->right) > 0){
         node->right = rightRotate(node->right);
         return leftRotate(node);
     }
     return node;
 }
 
-Node* insert(Node* node, int value) {
-    if (node == NULL) {
-        return createNode(value);
+Node* insert(Node* root, int data){
+    if(root == nullptr) return newNode(data);
+
+    if(data < root->data){
+        root->left = insert(root->left, data);
     }
-    if (value < node->data) {
-        node->left = insert(node->left, value);
-    } else if (value > node->data) {
-        node->right = insert(node->right, value);
-    } else {
-        return node;  // duplicates not allowed
+    else if(data > root->data){
+        root->right = insert(root->right, data);
     }
-    return balance(node);
+    else{
+        return root;
+    }
+    return balance(root);
 }
 
-Node* findMin(Node* node) {
-    while (node->left != NULL) {
-        node = node->left;
+Node* findMin(Node* root){
+    while(root->left != nullptr){
+        root = root->left;
     }
-    return node;
+    return root;
 }
 
-Node* deleteNode(Node* node, int value) {
-    if (node == NULL) return NULL;
+Node* deleteNode(Node* root, int val){
+    if(root == nullptr) return nullptr;
 
-    if (value < node->data) {
-        node->left = deleteNode(node->left, value);
-    } else if (value > node->data) {
-        node->right = deleteNode(node->right, value);
-    } else {
-        if (node->left == NULL || node->right == NULL) {
-            Node* child = (node->left != NULL) ? node->left : node->right;
-            delete node;
-            return child;  // may be NULL
+    if(val < root->data){
+        root->left = deleteNode(root->left, val);
+    }
+    else if(val > root->data){
+        root->right = deleteNode(root->right, val);
+    }
+    else{
+        if(root->left == nullptr || root->right == nullptr){
+            Node* temp = root->left ? root->left : root->right;
+            delete root;
+            return temp;
         }
-        Node* successor = findMin(node->right);
-        node->data = successor->data;
-        node->right = deleteNode(node->right, successor->data);
+        Node* temp = findMin(root->right);
+        root->data = temp->data;
+        root->right = deleteNode(root->right, temp->data);
     }
-    return balance(node);
+    return balance(root);
 }
 
-bool search(Node* node, int value) {
-    if (node == NULL) return false;
-    if (node->data == value) return true;
-    if (value < node->data) return search(node->left, value);
-    return search(node->right, value);
+void inorder(Node* root){
+    if(root == nullptr) return;
+    inorder(root->left);
+    cout << root->data << " ";
+    inorder(root->right);
 }
 
-void inorder(Node* node) {
-    if (node == NULL) return;
-    inorder(node->left);
-    cout << node->data << " ";
-    inorder(node->right);
+void preorder(Node* root){
+    if(root == nullptr) return;
+    cout << root->data << " ";
+    preorder(root->left);
+    preorder(root->right);
 }
 
-void preorder(Node* node) {
-    if (node == NULL) return;
-    cout << node->data << " ";
-    preorder(node->left);
-    preorder(node->right);
-}
+int main()
+{
+    Node* root = nullptr;
+    int arr[] = {10, 20, 30, 40, 50, 25};
 
-int main() {
-    Node* root = NULL;
-
-    // inserting sorted data would make a normal BST a straight line,
-    // but the AVL tree keeps balancing itself
-    int values[] = {10, 20, 30, 40, 50, 25};
-    for (int i = 0; i < 6; i++) {
-        root = insert(root, values[i]);
+    for(int i = 0; i<6; i++){
+        root = insert(root, arr[i]);
     }
 
-    cout << "Preorder:  ";
+    cout << "preorder: ";
     preorder(root);
     cout << endl;
-    cout << "Inorder:   ";
+    cout << "inorder: ";
     inorder(root);
     cout << endl;
-    cout << "Root: " << root->data << ", Height: " << height(root) << endl;
-
-    cout << "Search 25: " << (search(root, 25) ? "Found" : "Not found") << endl;
+    cout << "root: " << root->data << " height: " << height(root) << endl;
 
     root = deleteNode(root, 40);
-    cout << "After deleting 40, preorder: ";
+    cout << "preorder: ";
     preorder(root);
     cout << endl;
-    cout << "Root: " << root->data << ", Height: " << height(root) << endl;
+    cout << "root: " << root->data << " height: " << height(root) << endl;
 
     return 0;
 }

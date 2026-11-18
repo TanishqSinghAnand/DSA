@@ -1,4 +1,3 @@
-// Queue as ADT using a Linked List
 #include <iostream>
 using namespace std;
 
@@ -7,67 +6,52 @@ struct Node {
     Node* next;
 };
 
-class Queue {
+class Queue{
     Node* front;
     Node* rear;
 
 public:
-    Queue() {
-        front = NULL;
-        rear = NULL;
+    Queue(){
+        front = nullptr;
+        rear = nullptr;
     }
 
-    bool isEmpty() {
-        return front == NULL;
+    bool isEmpty(){
+        return front == nullptr;
     }
 
-    // add element at the rear
-    void enqueue(int value) {
-        Node* newNode = new Node;
-        newNode->data = value;
-        newNode->next = NULL;
+    void enqueue(int data){
+        Node* node = new Node();
+        node->data = data;
+        node->next = nullptr;
 
-        if (rear == NULL) {
-            front = newNode;
-            rear = newNode;
-        } else {
-            rear->next = newNode;
-            rear = newNode;
+        if(rear == nullptr){
+            front = rear = node;
+            return;
         }
-        cout << value << " enqueued" << endl;
+        rear->next = node;
+        rear = node;
     }
 
-    // remove element from the front
-    void dequeue() {
-        if (isEmpty()) {
-            cout << "Queue Underflow!" << endl;
+    void dequeue(){
+        if(isEmpty()){
+            cout << "underflow" << endl;
             return;
         }
         Node* temp = front;
-        cout << front->data << " dequeued" << endl;
         front = front->next;
-        if (front == NULL) {
-            rear = NULL;
-        }
+        if(front == nullptr) rear = nullptr;
         delete temp;
     }
 
-    int peek() {
-        if (isEmpty()) {
-            cout << "Queue is empty!" << endl;
-            return -1;
-        }
+    int peek(){
+        if(isEmpty()) return -1;
         return front->data;
     }
 
-    void display() {
-        if (isEmpty()) {
-            cout << "Queue is empty" << endl;
-            return;
-        }
+    void print(){
         Node* temp = front;
-        cout << "Queue (front to rear): ";
-        while (temp != NULL) {
+        while(temp != nullptr){
             cout << temp->data << " ";
             temp = temp->next;
         }
@@ -75,23 +59,23 @@ public:
     }
 };
 
-int main() {
+int main()
+{
     Queue q;
 
     q.enqueue(10);
     q.enqueue(20);
     q.enqueue(30);
-    q.display();
+    q.print();
 
-    cout << "Front element: " << q.peek() << endl;
-
-    q.dequeue();
-    q.display();
+    cout << "front: " << q.peek() << endl;
 
     q.dequeue();
+    q.print();
+
     q.dequeue();
-    q.dequeue();  // underflow
-    q.display();
+    q.dequeue();
+    q.dequeue();
 
     return 0;
 }

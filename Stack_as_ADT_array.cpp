@@ -1,67 +1,56 @@
-// Stack as ADT using an Array
 #include <iostream>
 using namespace std;
 
 #define MAX 5
 
-class Stack {
+class Stack{
     int arr[MAX];
     int top;
 
 public:
-    Stack() {
+    Stack(){
         top = -1;
     }
 
-    bool isEmpty() {
+    bool isEmpty(){
         return top == -1;
     }
 
-    bool isFull() {
-        return top == MAX - 1;
+    bool isFull(){
+        return top == MAX-1;
     }
 
-    void push(int value) {
-        if (isFull()) {
-            cout << "Stack Overflow! Cannot push " << value << endl;
+    void push(int val){
+        if(isFull()){
+            cout << "overflow" << endl;
             return;
         }
-        top++;
-        arr[top] = value;
-        cout << value << " pushed" << endl;
+        arr[++top] = val;
     }
 
-    void pop() {
-        if (isEmpty()) {
-            cout << "Stack Underflow!" << endl;
+    void pop(){
+        if(isEmpty()){
+            cout << "underflow" << endl;
             return;
         }
-        cout << arr[top] << " popped" << endl;
         top--;
     }
 
-    int peek() {
-        if (isEmpty()) {
-            cout << "Stack is empty!" << endl;
-            return -1;
-        }
+    int peek(){
+        if(isEmpty()) return -1;
         return arr[top];
     }
 
-    void display() {
-        if (isEmpty()) {
-            cout << "Stack is empty" << endl;
-            return;
-        }
-        cout << "Stack (top to bottom): ";
-        for (int i = top; i >= 0; i--) {
+    void print(){
+        for(int i = top; i>=0; i--){
             cout << arr[i] << " ";
         }
         cout << endl;
     }
 };
 
-int main() {
+int main()
+{
     Stack s;
 
     s.push(10);
@@ -69,14 +58,14 @@ int main() {
     s.push(30);
     s.push(40);
     s.push(50);
-    s.push(60);  // overflow
-    s.display();
+    s.push(60);
+    s.print();
 
-    cout << "Top element: " << s.peek() << endl;
+    cout << "top: " << s.peek() << endl;
 
     s.pop();
     s.pop();
-    s.display();
+    s.print();
 
     return 0;
 }

@@ -1,4 +1,3 @@
-// Selection Sort on a Linked List
 #include <iostream>
 using namespace std;
 
@@ -7,36 +6,25 @@ struct Node {
     Node* next;
 };
 
-void insertAtEnd(Node*& head, int value) {
-    Node* newNode = new Node;
-    newNode->data = value;
-    newNode->next = NULL;
+Node* insertAtEnd(Node* head, int data){
+    Node* node = new Node();
+    node->data = data;
+    node->next = nullptr;
+    if(head == nullptr) return node;
 
-    if (head == NULL) {
-        head = newNode;
-        return;
-    }
     Node* temp = head;
-    while (temp->next != NULL) {
+    while(temp->next != nullptr){
         temp = temp->next;
     }
-    temp->next = newNode;
+    temp->next = node;
+    return head;
 }
 
-void display(Node* head) {
-    while (head != NULL) {
-        cout << head->data << " ";
-        head = head->next;
-    }
-    cout << endl;
-}
-
-// find the smallest node in the rest of the list and swap data
-void selectionSort(Node* head) {
-    for (Node* i = head; i != NULL; i = i->next) {
+void selectionSort(Node* head){
+    for(Node* i = head; i != nullptr; i = i->next){
         Node* minNode = i;
-        for (Node* j = i->next; j != NULL; j = j->next) {
-            if (j->data < minNode->data) {
+        for(Node* j = i->next; j != nullptr; j = j->next){
+            if(j->data < minNode->data){
                 minNode = j;
             }
         }
@@ -46,22 +34,27 @@ void selectionSort(Node* head) {
     }
 }
 
-int main() {
-    Node* head = NULL;
-    int values[] = {64, 25, 12, 22, 11, 90};
-    int n = 6;
+void printList(Node* head){
+    Node* temp = head;
+    while(temp != nullptr){
+        cout << temp->data << " ";
+        temp = temp->next;
+    }
+    cout << endl;
+}
 
-    for (int i = 0; i < n; i++) {
-        insertAtEnd(head, values[i]);
+int main()
+{
+    Node* head = nullptr;
+    int arr[] = {64, 25, 12, 22, 11, 90};
+
+    for(int i = 0; i<6; i++){
+        head = insertAtEnd(head, arr[i]);
     }
 
-    cout << "Before sorting: ";
-    display(head);
-
+    printList(head);
     selectionSort(head);
-
-    cout << "After sorting: ";
-    display(head);
+    printList(head);
 
     return 0;
 }

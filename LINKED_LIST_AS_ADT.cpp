@@ -1,4 +1,3 @@
-// Singly Linked List as ADT
 #include <iostream>
 using namespace std;
 
@@ -7,74 +6,71 @@ struct Node {
     Node* next;
 };
 
-class LinkedList {
+class LinkedList{
     Node* head;
 
 public:
-    LinkedList() {
-        head = NULL;
+    LinkedList(){
+        head = nullptr;
     }
 
-    void insertAtBeginning(int value) {
-        Node* newNode = new Node;
-        newNode->data = value;
-        newNode->next = head;
-        head = newNode;
+    void insertAtStart(int data){
+        Node* node = new Node();
+        node->data = data;
+        node->next = head;
+        head = node;
     }
 
-    void insertAtEnd(int value) {
-        Node* newNode = new Node;
-        newNode->data = value;
-        newNode->next = NULL;
+    void insertAtEnd(int data){
+        Node* node = new Node();
+        node->data = data;
+        node->next = nullptr;
 
-        if (head == NULL) {
-            head = newNode;
+        if(head == nullptr){
+            head = node;
             return;
         }
         Node* temp = head;
-        while (temp->next != NULL) {
+        while(temp->next != nullptr){
             temp = temp->next;
         }
-        temp->next = newNode;
+        temp->next = node;
     }
 
-    // insert at position (0 based)
-    void insertAtPosition(int pos, int value) {
-        if (pos == 0) {
-            insertAtBeginning(value);
+    void insertAtPos(int pos, int data){
+        if(pos == 0){
+            insertAtStart(data);
             return;
         }
         Node* temp = head;
-        for (int i = 0; i < pos - 1 && temp != NULL; i++) {
+        for(int i = 0; i<pos-1 && temp != nullptr; i++){
             temp = temp->next;
         }
-        if (temp == NULL) {
-            cout << "Invalid position!" << endl;
+        if(temp == nullptr){
+            cout << "invalid pos" << endl;
             return;
         }
-        Node* newNode = new Node;
-        newNode->data = value;
-        newNode->next = temp->next;
-        temp->next = newNode;
+        Node* node = new Node();
+        node->data = data;
+        node->next = temp->next;
+        temp->next = node;
     }
 
-    void deleteValue(int value) {
-        if (head == NULL) {
-            cout << "List is empty!" << endl;
-            return;
-        }
-        if (head->data == value) {
+    void deleteVal(int val){
+        if(head == nullptr) return;
+
+        if(head->data == val){
             Node* del = head;
             head = head->next;
             delete del;
             return;
         }
         Node* temp = head;
-        while (temp->next != NULL && temp->next->data != value) {
+        while(temp->next != nullptr && temp->next->data != val){
             temp = temp->next;
         }
-        if (temp->next == NULL) {
-            cout << value << " not found!" << endl;
+        if(temp->next == nullptr){
+            cout << "not found" << endl;
             return;
         }
         Node* del = temp->next;
@@ -82,30 +78,28 @@ public:
         delete del;
     }
 
-    bool search(int value) {
+    bool search(int val){
         Node* temp = head;
-        while (temp != NULL) {
-            if (temp->data == value) {
-                return true;
-            }
+        while(temp != nullptr){
+            if(temp->data == val) return true;
             temp = temp->next;
         }
         return false;
     }
 
-    int length() {
+    int length(){
         int count = 0;
         Node* temp = head;
-        while (temp != NULL) {
+        while(temp != nullptr){
             count++;
             temp = temp->next;
         }
         return count;
     }
 
-    void display() {
+    void print(){
         Node* temp = head;
-        while (temp != NULL) {
+        while(temp != nullptr){
             cout << temp->data << " -> ";
             temp = temp->next;
         }
@@ -113,23 +107,22 @@ public:
     }
 };
 
-int main() {
-    LinkedList list;
+int main()
+{
+    LinkedList l;
 
-    list.insertAtEnd(10);
-    list.insertAtEnd(20);
-    list.insertAtEnd(30);
-    list.insertAtBeginning(5);
-    list.insertAtPosition(2, 15);
-    cout << "List: ";
-    list.display();
+    l.insertAtEnd(10);
+    l.insertAtEnd(20);
+    l.insertAtEnd(30);
+    l.insertAtStart(5);
+    l.insertAtPos(2, 15);
+    l.print();
 
-    cout << "Length: " << list.length() << endl;
-    cout << "Is 20 present? " << (list.search(20) ? "Yes" : "No") << endl;
+    cout << "length: " << l.length() << endl;
+    cout << "search 20: " << l.search(20) << endl;
 
-    list.deleteValue(20);
-    cout << "After deleting 20: ";
-    list.display();
+    l.deleteVal(20);
+    l.print();
 
     return 0;
 }

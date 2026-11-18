@@ -1,4 +1,3 @@
-// Binary Search Tree (BST)
 #include <iostream>
 using namespace std;
 
@@ -8,121 +7,119 @@ struct Node {
     Node* right;
 };
 
-Node* createNode(int value) {
-    Node* newNode = new Node;
-    newNode->data = value;
-    newNode->left = NULL;
-    newNode->right = NULL;
-    return newNode;
+Node* newNode(int data){
+    Node* node = new Node();
+    node->data = data;
+    node->left = nullptr;
+    node->right = nullptr;
+    return node;
 }
 
-Node* insert(Node* root, int value) {
-    if (root == NULL) {
-        return createNode(value);
+Node* insert(Node* root, int data){
+    if(root == nullptr) return newNode(data);
+
+    if(data < root->data){
+        root->left = insert(root->left, data);
     }
-    if (value < root->data) {
-        root->left = insert(root->left, value);
-    } else if (value > root->data) {
-        root->right = insert(root->right, value);
+    else if(data > root->data){
+        root->right = insert(root->right, data);
     }
-    return root;  // duplicates are ignored
+    return root;
 }
 
-bool search(Node* root, int value) {
-    if (root == NULL) return false;
-    if (root->data == value) return true;
-    if (value < root->data) return search(root->left, value);
-    return search(root->right, value);
+bool search(Node* root, int val){
+    if(root == nullptr) return false;
+    if(root->data == val) return true;
+    if(val < root->data) return search(root->left, val);
+    return search(root->right, val);
 }
 
-Node* findMin(Node* root) {
-    while (root->left != NULL) {
+Node* findMin(Node* root){
+    while(root->left != nullptr){
         root = root->left;
     }
     return root;
 }
 
-Node* deleteNode(Node* root, int value) {
-    if (root == NULL) return NULL;
+Node* deleteNode(Node* root, int val){
+    if(root == nullptr) return nullptr;
 
-    if (value < root->data) {
-        root->left = deleteNode(root->left, value);
-    } else if (value > root->data) {
-        root->right = deleteNode(root->right, value);
-    } else {
-        // case 1 and 2: zero or one child
-        if (root->left == NULL) {
+    if(val < root->data){
+        root->left = deleteNode(root->left, val);
+    }
+    else if(val > root->data){
+        root->right = deleteNode(root->right, val);
+    }
+    else{
+        if(root->left == nullptr){
             Node* temp = root->right;
             delete root;
             return temp;
         }
-        if (root->right == NULL) {
+        if(root->right == nullptr){
             Node* temp = root->left;
             delete root;
             return temp;
         }
-        // case 3: two children -> replace with inorder successor
-        Node* successor = findMin(root->right);
-        root->data = successor->data;
-        root->right = deleteNode(root->right, successor->data);
+        Node* temp = findMin(root->right);
+        root->data = temp->data;
+        root->right = deleteNode(root->right, temp->data);
     }
     return root;
 }
 
-void inorder(Node* root) {
-    if (root == NULL) return;
+void inorder(Node* root){
+    if(root == nullptr) return;
     inorder(root->left);
     cout << root->data << " ";
     inorder(root->right);
 }
 
-void preorder(Node* root) {
-    if (root == NULL) return;
+void preorder(Node* root){
+    if(root == nullptr) return;
     cout << root->data << " ";
     preorder(root->left);
     preorder(root->right);
 }
 
-void postorder(Node* root) {
-    if (root == NULL) return;
+void postorder(Node* root){
+    if(root == nullptr) return;
     postorder(root->left);
     postorder(root->right);
     cout << root->data << " ";
 }
 
-int main() {
-    Node* root = NULL;
-    int values[] = {50, 30, 70, 20, 40, 60, 80};
+int main()
+{
+    Node* root = nullptr;
+    int arr[] = {50, 30, 70, 20, 40, 60, 80};
 
-    for (int i = 0; i < 7; i++) {
-        root = insert(root, values[i]);
+    for(int i = 0; i<7; i++){
+        root = insert(root, arr[i]);
     }
 
-    cout << "Inorder (sorted): ";
+    cout << "inorder: ";
     inorder(root);
     cout << endl;
-    cout << "Preorder:  ";
+    cout << "preorder: ";
     preorder(root);
     cout << endl;
-    cout << "Postorder: ";
+    cout << "postorder: ";
     postorder(root);
     cout << endl;
 
-    cout << "Search 40: " << (search(root, 40) ? "Found" : "Not found") << endl;
-    cout << "Search 90: " << (search(root, 90) ? "Found" : "Not found") << endl;
+    cout << "search 40: " << search(root, 40) << endl;
+    cout << "search 90: " << search(root, 90) << endl;
 
-    root = deleteNode(root, 20);  // leaf
-    cout << "After deleting 20: ";
+    root = deleteNode(root, 20);
     inorder(root);
     cout << endl;
 
-    root = deleteNode(root, 30);  // one child
-    cout << "After deleting 30: ";
+    root = deleteNode(root, 30);
     inorder(root);
     cout << endl;
 
-    root = deleteNode(root, 50);  // two children (root)
-    cout << "After deleting 50: ";
+    root = deleteNode(root, 50);
     inorder(root);
     cout << endl;
 

@@ -1,112 +1,88 @@
-// Fixed size List implemented using an Array (List as ADT)
 #include <iostream>
 using namespace std;
 
 #define MAX 10
 
-class FixedList {
+class List{
     int arr[MAX];
     int size;
 
 public:
-    FixedList() {
+    List(){
         size = 0;
     }
 
-    bool isFull() {
-        return size == MAX;
-    }
-
-    bool isEmpty() {
-        return size == 0;
-    }
-
-    // insert value at given position (0 based)
-    void insert(int pos, int value) {
-        if (isFull()) {
-            cout << "List is full!" << endl;
+    void insert(int pos, int val){
+        if(size == MAX){
+            cout << "list full" << endl;
             return;
         }
-        if (pos < 0 || pos > size) {
-            cout << "Invalid position!" << endl;
+        if(pos < 0 || pos > size){
+            cout << "invalid pos" << endl;
             return;
         }
-        // shift elements to the right
-        for (int i = size; i > pos; i--) {
-            arr[i] = arr[i - 1];
+        for(int i = size; i>pos; i--){
+            arr[i] = arr[i-1];
         }
-        arr[pos] = value;
+        arr[pos] = val;
         size++;
     }
 
-    // delete element at given position
-    void remove(int pos) {
-        if (isEmpty()) {
-            cout << "List is empty!" << endl;
+    void remove(int pos){
+        if(size == 0){
+            cout << "list empty" << endl;
             return;
         }
-        if (pos < 0 || pos >= size) {
-            cout << "Invalid position!" << endl;
+        if(pos < 0 || pos >= size){
+            cout << "invalid pos" << endl;
             return;
         }
-        // shift elements to the left
-        for (int i = pos; i < size - 1; i++) {
-            arr[i] = arr[i + 1];
+        for(int i = pos; i<size-1; i++){
+            arr[i] = arr[i+1];
         }
         size--;
     }
 
-    // returns index of value, or -1 if not found
-    int search(int value) {
-        for (int i = 0; i < size; i++) {
-            if (arr[i] == value) {
-                return i;
-            }
+    int search(int val){
+        for(int i = 0; i<size; i++){
+            if(arr[i] == val) return i;
         }
         return -1;
     }
 
-    int get(int pos) {
-        if (pos < 0 || pos >= size) {
-            cout << "Invalid position!" << endl;
-            return -1;
-        }
+    int get(int pos){
+        if(pos < 0 || pos >= size) return -1;
         return arr[pos];
     }
 
-    int length() {
+    int length(){
         return size;
     }
 
-    void display() {
-        if (isEmpty()) {
-            cout << "List is empty" << endl;
-            return;
-        }
-        for (int i = 0; i < size; i++) {
+    void print(){
+        for(int i = 0; i<size; i++){
             cout << arr[i] << " ";
         }
         cout << endl;
     }
 };
 
-int main() {
-    FixedList list;
+int main()
+{
+    List l;
 
-    list.insert(0, 10);
-    list.insert(1, 20);
-    list.insert(2, 30);
-    list.insert(1, 15);
-    cout << "List: ";
-    list.display();
+    l.insert(0, 10);
+    l.insert(1, 20);
+    l.insert(2, 30);
+    l.insert(1, 15);
+    l.print();
 
-    cout << "Length: " << list.length() << endl;
-    cout << "Element at position 2: " << list.get(2) << endl;
-    cout << "Index of 30: " << list.search(30) << endl;
+    cout << "length: " << l.length() << endl;
+    cout << "get(2): " << l.get(2) << endl;
+    cout << "search 30: " << l.search(30) << endl;
 
-    list.remove(0);
-    cout << "After deleting position 0: ";
-    list.display();
+    l.remove(0);
+    l.print();
 
     return 0;
 }

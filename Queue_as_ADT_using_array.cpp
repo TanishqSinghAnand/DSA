@@ -1,73 +1,61 @@
-// Queue as ADT using an Array (circular queue)
 #include <iostream>
 using namespace std;
 
 #define MAX 5
 
-class Queue {
+class Queue{
     int arr[MAX];
-    int front;
-    int rear;
-    int count;
+    int front, rear, count;
 
 public:
-    Queue() {
+    Queue(){
         front = 0;
         rear = -1;
         count = 0;
     }
 
-    bool isEmpty() {
+    bool isEmpty(){
         return count == 0;
     }
 
-    bool isFull() {
+    bool isFull(){
         return count == MAX;
     }
 
-    void enqueue(int value) {
-        if (isFull()) {
-            cout << "Queue Overflow! Cannot add " << value << endl;
+    void enqueue(int val){
+        if(isFull()){
+            cout << "overflow" << endl;
             return;
         }
-        rear = (rear + 1) % MAX;  // wrap around to reuse empty space
-        arr[rear] = value;
+        rear = (rear+1) % MAX;
+        arr[rear] = val;
         count++;
-        cout << value << " enqueued" << endl;
     }
 
-    void dequeue() {
-        if (isEmpty()) {
-            cout << "Queue Underflow!" << endl;
+    void dequeue(){
+        if(isEmpty()){
+            cout << "underflow" << endl;
             return;
         }
-        cout << arr[front] << " dequeued" << endl;
-        front = (front + 1) % MAX;
+        front = (front+1) % MAX;
         count--;
     }
 
-    int peek() {
-        if (isEmpty()) {
-            cout << "Queue is empty!" << endl;
-            return -1;
-        }
+    int peek(){
+        if(isEmpty()) return -1;
         return arr[front];
     }
 
-    void display() {
-        if (isEmpty()) {
-            cout << "Queue is empty" << endl;
-            return;
-        }
-        cout << "Queue (front to rear): ";
-        for (int i = 0; i < count; i++) {
-            cout << arr[(front + i) % MAX] << " ";
+    void print(){
+        for(int i = 0; i<count; i++){
+            cout << arr[(front+i) % MAX] << " ";
         }
         cout << endl;
     }
 };
 
-int main() {
+int main()
+{
     Queue q;
 
     q.enqueue(10);
@@ -75,17 +63,17 @@ int main() {
     q.enqueue(30);
     q.enqueue(40);
     q.enqueue(50);
-    q.enqueue(60);  // overflow
-    q.display();
+    q.enqueue(60);
+    q.print();
 
-    cout << "Front element: " << q.peek() << endl;
+    cout << "front: " << q.peek() << endl;
 
     q.dequeue();
     q.dequeue();
-    q.display();
+    q.print();
 
-    q.enqueue(70);  // reuses the freed space
-    q.display();
+    q.enqueue(70);
+    q.print();
 
     return 0;
 }

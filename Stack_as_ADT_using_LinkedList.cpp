@@ -1,4 +1,3 @@
-// Stack as ADT using a Linked List
 #include <iostream>
 using namespace std;
 
@@ -7,54 +6,43 @@ struct Node {
     Node* next;
 };
 
-class Stack {
+class Stack{
     Node* top;
 
 public:
-    Stack() {
-        top = NULL;
+    Stack(){
+        top = nullptr;
     }
 
-    bool isEmpty() {
-        return top == NULL;
+    bool isEmpty(){
+        return top == nullptr;
     }
 
-    // new node becomes the top
-    void push(int value) {
-        Node* newNode = new Node;
-        newNode->data = value;
-        newNode->next = top;
-        top = newNode;
-        cout << value << " pushed" << endl;
+    void push(int data){
+        Node* node = new Node();
+        node->data = data;
+        node->next = top;
+        top = node;
     }
 
-    void pop() {
-        if (isEmpty()) {
-            cout << "Stack Underflow!" << endl;
+    void pop(){
+        if(isEmpty()){
+            cout << "underflow" << endl;
             return;
         }
         Node* temp = top;
-        cout << top->data << " popped" << endl;
         top = top->next;
         delete temp;
     }
 
-    int peek() {
-        if (isEmpty()) {
-            cout << "Stack is empty!" << endl;
-            return -1;
-        }
+    int peek(){
+        if(isEmpty()) return -1;
         return top->data;
     }
 
-    void display() {
-        if (isEmpty()) {
-            cout << "Stack is empty" << endl;
-            return;
-        }
-        cout << "Stack (top to bottom): ";
+    void print(){
         Node* temp = top;
-        while (temp != NULL) {
+        while(temp != nullptr){
             cout << temp->data << " ";
             temp = temp->next;
         }
@@ -62,23 +50,23 @@ public:
     }
 };
 
-int main() {
+int main()
+{
     Stack s;
 
     s.push(10);
     s.push(20);
     s.push(30);
-    s.display();
+    s.print();
 
-    cout << "Top element: " << s.peek() << endl;
-
-    s.pop();
-    s.display();
+    cout << "top: " << s.peek() << endl;
 
     s.pop();
+    s.print();
+
     s.pop();
-    s.pop();  // underflow
-    s.display();
+    s.pop();
+    s.pop();
 
     return 0;
 }

@@ -1,4 +1,3 @@
-// Insertion Sort on a Linked List
 #include <iostream>
 using namespace std;
 
@@ -7,74 +6,65 @@ struct Node {
     Node* next;
 };
 
-void insertAtEnd(Node*& head, int value) {
-    Node* newNode = new Node;
-    newNode->data = value;
-    newNode->next = NULL;
+Node* insertAtEnd(Node* head, int data){
+    Node* node = new Node();
+    node->data = data;
+    node->next = nullptr;
+    if(head == nullptr) return node;
 
-    if (head == NULL) {
-        head = newNode;
-        return;
-    }
     Node* temp = head;
-    while (temp->next != NULL) {
+    while(temp->next != nullptr){
         temp = temp->next;
     }
-    temp->next = newNode;
+    temp->next = node;
+    return head;
 }
 
-void display(Node* head) {
-    while (head != NULL) {
-        cout << head->data << " ";
-        head = head->next;
-    }
-    cout << endl;
-}
-
-// take nodes one by one from the original list
-// and insert them at the correct place in a new sorted list
-Node* insertionSort(Node* head) {
-    Node* sorted = NULL;
-
+Node* insertionSort(Node* head){
+    Node* sorted = nullptr;
     Node* curr = head;
-    while (curr != NULL) {
-        Node* nextNode = curr->next;
 
-        if (sorted == NULL || curr->data < sorted->data) {
-            // insert at beginning of sorted list
+    while(curr != nullptr){
+        Node* next = curr->next;
+
+        if(sorted == nullptr || curr->data < sorted->data){
             curr->next = sorted;
             sorted = curr;
-        } else {
-            // find the correct spot
+        }
+        else{
             Node* temp = sorted;
-            while (temp->next != NULL && temp->next->data < curr->data) {
+            while(temp->next != nullptr && temp->next->data < curr->data){
                 temp = temp->next;
             }
             curr->next = temp->next;
             temp->next = curr;
         }
-
-        curr = nextNode;
+        curr = next;
     }
     return sorted;
 }
 
-int main() {
-    Node* head = NULL;
-    int values[] = {12, 11, 13, 5, 6, 1};
-    int n = 6;
+void printList(Node* head){
+    Node* temp = head;
+    while(temp != nullptr){
+        cout << temp->data << " ";
+        temp = temp->next;
+    }
+    cout << endl;
+}
 
-    for (int i = 0; i < n; i++) {
-        insertAtEnd(head, values[i]);
+int main()
+{
+    Node* head = nullptr;
+    int arr[] = {12, 11, 13, 5, 6, 1};
+
+    for(int i = 0; i<6; i++){
+        head = insertAtEnd(head, arr[i]);
     }
 
-    cout << "Before sorting: ";
-    display(head);
-
+    printList(head);
     head = insertionSort(head);
-
-    cout << "After sorting: ";
-    display(head);
+    printList(head);
 
     return 0;
 }
