@@ -6,10 +6,15 @@ struct Node {
     Node* next;
 };
 
-Node* insertAtEnd(Node* head, int data){
+Node* newNode(int data){
     Node* node = new Node();
     node->data = data;
     node->next = nullptr;
+    return node;
+}
+
+Node* insertAtEnd(Node* head, int data){
+    Node* node = newNode(data);
     if(head == nullptr) return node;
 
     Node* temp = head;
@@ -46,15 +51,13 @@ void printList(Node* head){
 int main()
 {
     Node* head = nullptr;
-    int arr[] = {64, 25, 12, 22, 11, 90};
-
-    for(int i = 0; i<6; i++){
-        head = insertAtEnd(head, arr[i]);
+    int arr[] = {8,5,4,3,2,1,6,9,11};
+    for(int val : arr){
+        head = insertAtEnd(head, val);
     }
 
-    printList(head);
     selectionSort(head);
-    printList(head);
 
+    printList(head);
     return 0;
 }

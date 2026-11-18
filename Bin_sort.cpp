@@ -3,29 +3,27 @@
 using namespace std;
 
 void binSort(vector<int> &arr){
-    int n = arr.size();
     int maxVal = arr[0];
-    for(int i = 1; i<n; i++){
-        if(arr[i] > maxVal) maxVal = arr[i];
+    for(int val : arr){
+        if(val > maxVal) maxVal = val;
     }
 
-    vector<int> bin(maxVal+1, 0);
-    for(int i = 0; i<n; i++){
-        bin[arr[i]]++;
+    vector<int> bins(maxVal+1, 0);
+    for(int val : arr){
+        bins[val]++;
     }
 
     int idx = 0;
     for(int i = 0; i<=maxVal; i++){
-        while(bin[i] > 0){
+        while(bins[i]-- > 0){
             arr[idx++] = i;
-            bin[i]--;
         }
     }
 }
 
 int main()
 {
-    vector<int> arr = {4, 2, 7, 1, 3, 2, 9, 0, 4};
+    vector<int> arr = {8,5,4,3,2,1,6,9,11};
 
     binSort(arr);
 

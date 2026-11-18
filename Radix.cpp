@@ -2,21 +2,29 @@
 #include <vector>
 using namespace std;
 
-void countSort(vector<int> &arr, int place){
+int getMax(vector<int> &arr){
+    int maxVal = arr[0];
+    for(int val : arr){
+        if(val > maxVal) maxVal = val;
+    }
+    return maxVal;
+}
+
+void countSort(vector<int> &arr, int exp){
     int n = arr.size();
     vector<int> output(n);
     int count[10] = {0};
 
     for(int i = 0; i<n; i++){
-        count[(arr[i]/place) % 10]++;
+        count[(arr[i]/exp)%10]++;
     }
     for(int i = 1; i<10; i++){
         count[i] += count[i-1];
     }
     for(int i = n-1; i>=0; i--){
-        int d = (arr[i]/place) % 10;
-        output[count[d]-1] = arr[i];
-        count[d]--;
+        int digit = (arr[i]/exp)%10;
+        output[count[digit]-1] = arr[i];
+        count[digit]--;
     }
     for(int i = 0; i<n; i++){
         arr[i] = output[i];
@@ -24,19 +32,16 @@ void countSort(vector<int> &arr, int place){
 }
 
 void radixSort(vector<int> &arr){
-    int maxVal = arr[0];
-    for(int i = 1; i<arr.size(); i++){
-        if(arr[i] > maxVal) maxVal = arr[i];
-    }
+    int maxVal = getMax(arr);
 
-    for(int place = 1; maxVal/place > 0; place *= 10){
-        countSort(arr, place);
+    for(int exp = 1; maxVal/exp > 0; exp *= 10){
+        countSort(arr, exp);
     }
 }
 
 int main()
 {
-    vector<int> arr = {170, 45, 75, 90, 802, 24, 2, 66};
+    vector<int> arr = {170,45,75,90,802,24,2,66};
 
     radixSort(arr);
 

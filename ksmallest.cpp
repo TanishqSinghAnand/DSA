@@ -2,11 +2,10 @@
 #include <vector>
 using namespace std;
 
-void kSmallest(vector<int> &arr, int k){
-    int n = arr.size();
-    for(int i = 0; i<k; i++){
+vector<int> kSmallestElements(vector<int> arr, int k){
+    for(int i = 0; i<arr.size()-1; i++){
         int minIdx = i;
-        for(int j = i+1; j<n; j++){
+        for(int j = i+1; j<arr.size(); j++){
             if(arr[j] < arr[minIdx]){
                 minIdx = j;
             }
@@ -15,19 +14,19 @@ void kSmallest(vector<int> &arr, int k){
         arr[i] = arr[minIdx];
         arr[minIdx] = temp;
     }
+    return vector<int>(arr.begin(), arr.begin()+k);
 }
 
 int main()
 {
-    vector<int> arr = {7, 10, 4, 3, 20, 15, 1, 8};
-    int k = 3;
+    vector<int> arr = {8,5,4,3,2,1,6,9,11};
+    int k = 4;
 
-    kSmallest(arr, k);
+    vector<int> result = kSmallestElements(arr, k);
 
-    for(int i = 0; i<k; i++){
-        cout << arr[i] << " ";
+    for(int val : result){
+        cout << val << " ";
     }
     cout << endl;
-    cout << "kth smallest: " << arr[k-1] << endl;
     return 0;
 }

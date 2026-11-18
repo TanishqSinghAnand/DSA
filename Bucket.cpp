@@ -2,42 +2,38 @@
 #include <vector>
 using namespace std;
 
-void insertionSort(vector<float> &b){
-    for(int i = 1; i<b.size(); i++){
-        float key = b[i];
-        int j = i-1;
-        while(j >= 0 && b[j] > key){
-            b[j+1] = b[j];
-            j--;
-        }
-        b[j+1] = key;
-    }
-}
-
 void bucketSort(vector<float> &arr){
     int n = arr.size();
-    vector<float> bucket[10];
+    vector<vector<float>> buckets(n);
 
     for(int i = 0; i<n; i++){
-        int idx = arr[i] * 10;
-        bucket[idx].push_back(arr[i]);
+        int idx = n * arr[i];
+        buckets[idx].push_back(arr[i]);
     }
 
-    for(int i = 0; i<10; i++){
-        insertionSort(bucket[i]);
+    for(int i = 0; i<n; i++){
+        for(int j = 1; j<buckets[i].size(); j++){
+            float key = buckets[i][j];
+            int k = j-1;
+            while(k>=0 && buckets[i][k] > key){
+                buckets[i][k+1] = buckets[i][k];
+                k--;
+            }
+            buckets[i][k+1] = key;
+        }
     }
 
-    int k = 0;
-    for(int i = 0; i<10; i++){
-        for(int j = 0; j<bucket[i].size(); j++){
-            arr[k++] = bucket[i][j];
+    int idx = 0;
+    for(int i = 0; i<n; i++){
+        for(float val : buckets[i]){
+            arr[idx++] = val;
         }
     }
 }
 
 int main()
 {
-    vector<float> arr = {0.78, 0.17, 0.39, 0.26, 0.72, 0.94, 0.21, 0.12, 0.23, 0.68};
+    vector<float> arr = {0.42f,0.32f,0.23f,0.52f,0.25f,0.47f,0.51f};
 
     bucketSort(arr);
 

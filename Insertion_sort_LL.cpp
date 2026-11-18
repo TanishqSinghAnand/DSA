@@ -6,18 +6,26 @@ struct Node {
     Node* next;
 };
 
-Node* insertAtEnd(Node* head, int data){
+Node* newNode(int data){
     Node* node = new Node();
     node->data = data;
     node->next = nullptr;
-    if(head == nullptr) return node;
+    return node;
+}
 
-    Node* temp = head;
-    while(temp->next != nullptr){
-        temp = temp->next;
+Node* sortedInsert(Node* sorted, Node* node){
+    if(sorted == nullptr || sorted->data >= node->data){
+        node->next = sorted;
+        return node;
     }
-    temp->next = node;
-    return head;
+
+    Node* curr = sorted;
+    while(curr->next != nullptr && curr->next->data < node->data){
+        curr = curr->next;
+    }
+    node->next = curr->next;
+    curr->next = node;
+    return sorted;
 }
 
 Node* insertionSort(Node* head){
@@ -26,19 +34,7 @@ Node* insertionSort(Node* head){
 
     while(curr != nullptr){
         Node* next = curr->next;
-
-        if(sorted == nullptr || curr->data < sorted->data){
-            curr->next = sorted;
-            sorted = curr;
-        }
-        else{
-            Node* temp = sorted;
-            while(temp->next != nullptr && temp->next->data < curr->data){
-                temp = temp->next;
-            }
-            curr->next = temp->next;
-            temp->next = curr;
-        }
+        sorted = sortedInsert(sorted, curr);
         curr = next;
     }
     return sorted;
@@ -56,15 +52,15 @@ void printList(Node* head){
 int main()
 {
     Node* head = nullptr;
-    int arr[] = {12, 11, 13, 5, 6, 1};
-
-    for(int i = 0; i<6; i++){
-        head = insertAtEnd(head, arr[i]);
+    int arr[] = {8,5,4,3,2,1,6,9,11};
+    for(int i = 8; i>=0; i--){
+        Node* node = newNode(arr[i]);
+        node->next = head;
+        head = node;
     }
 
-    printList(head);
     head = insertionSort(head);
-    printList(head);
 
+    printList(head);
     return 0;
 }

@@ -6,123 +6,117 @@ struct Node {
     Node* next;
 };
 
-class LinkedList{
-    Node* head;
+Node* newNode(int data){
+    Node* node = new Node();
+    node->data = data;
+    node->next = nullptr;
+    return node;
+}
 
-public:
-    LinkedList(){
-        head = nullptr;
+Node* insertAtBeginning(Node* head, int data){
+    Node* node = newNode(data);
+    node->next = head;
+    return node;
+}
+
+Node* insertAtEnd(Node* head, int data){
+    Node* node = newNode(data);
+    if(head == nullptr) return node;
+
+    Node* temp = head;
+    while(temp->next != nullptr){
+        temp = temp->next;
     }
+    temp->next = node;
+    return head;
+}
 
-    void insertAtStart(int data){
-        Node* node = new Node();
-        node->data = data;
-        node->next = head;
-        head = node;
-    }
+Node* deleteValue(Node* head, int val){
+    if(head == nullptr) return head;
 
-    void insertAtEnd(int data){
-        Node* node = new Node();
-        node->data = data;
-        node->next = nullptr;
-
-        if(head == nullptr){
-            head = node;
-            return;
-        }
+    if(head->data == val){
         Node* temp = head;
-        while(temp->next != nullptr){
-            temp = temp->next;
-        }
-        temp->next = node;
+        head = head->next;
+        delete temp;
+        return head;
     }
 
-    void insertAtPos(int pos, int data){
-        if(pos == 0){
-            insertAtStart(data);
-            return;
-        }
-        Node* temp = head;
-        for(int i = 0; i<pos-1 && temp != nullptr; i++){
-            temp = temp->next;
-        }
-        if(temp == nullptr){
-            cout << "invalid pos" << endl;
-            return;
-        }
-        Node* node = new Node();
-        node->data = data;
-        node->next = temp->next;
-        temp->next = node;
+    Node* curr = head;
+    while(curr->next != nullptr && curr->next->data != val){
+        curr = curr->next;
     }
 
-    void deleteVal(int val){
-        if(head == nullptr) return;
-
-        if(head->data == val){
-            Node* del = head;
-            head = head->next;
-            delete del;
-            return;
-        }
-        Node* temp = head;
-        while(temp->next != nullptr && temp->next->data != val){
-            temp = temp->next;
-        }
-        if(temp->next == nullptr){
-            cout << "not found" << endl;
-            return;
-        }
-        Node* del = temp->next;
-        temp->next = del->next;
-        delete del;
+    if(curr->next != nullptr){
+        Node* temp = curr->next;
+        curr->next = curr->next->next;
+        delete temp;
     }
+    return head;
+}
 
-    bool search(int val){
-        Node* temp = head;
-        while(temp != nullptr){
-            if(temp->data == val) return true;
-            temp = temp->next;
-        }
-        return false;
+bool search(Node* head, int val){
+    Node* temp = head;
+    while(temp != nullptr){
+        if(temp->data == val) return true;
+        temp = temp->next;
     }
+    return false;
+}
 
-    int length(){
-        int count = 0;
-        Node* temp = head;
-        while(temp != nullptr){
-            count++;
-            temp = temp->next;
-        }
-        return count;
-    }
+Node* reverseList(Node* head){
+    Node* prev = nullptr;
+    Node* curr = head;
 
-    void print(){
-        Node* temp = head;
-        while(temp != nullptr){
-            cout << temp->data << " -> ";
-            temp = temp->next;
-        }
-        cout << "NULL" << endl;
+    while(curr != nullptr){
+        Node* nextNode = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = nextNode;
     }
-};
+    return prev;
+}
+
+int lengthOfList(Node* head){
+    int count = 0;
+    Node* temp = head;
+    while(temp != nullptr){
+        count++;
+        temp = temp->next;
+    }
+    return count;
+}
+
+void printList(Node* head){
+    Node* temp = head;
+    while(temp != nullptr){
+        cout << temp->data << " ";
+        temp = temp->next;
+    }
+    cout << endl;
+}
 
 int main()
 {
-    LinkedList l;
+    Node* head = nullptr;
 
-    l.insertAtEnd(10);
-    l.insertAtEnd(20);
-    l.insertAtEnd(30);
-    l.insertAtStart(5);
-    l.insertAtPos(2, 15);
-    l.print();
+    head = insertAtEnd(head, 8);
+    head = insertAtEnd(head, 5);
+    head = insertAtEnd(head, 4);
+    head = insertAtBeginning(head, 11);
 
-    cout << "length: " << l.length() << endl;
-    cout << "search 20: " << l.search(20) << endl;
+    cout << "List: ";
+    printList(head);
 
-    l.deleteVal(20);
-    l.print();
+    cout << "Length: " << lengthOfList(head) << endl;
+    cout << "Search 5: " << (search(head, 5) ? "found" : "not found") << endl;
+
+    head = deleteValue(head, 4);
+    cout << "After deleting 4: ";
+    printList(head);
+
+    head = reverseList(head);
+    cout << "Reversed: ";
+    printList(head);
 
     return 0;
 }

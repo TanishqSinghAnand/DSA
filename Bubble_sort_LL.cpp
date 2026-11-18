@@ -6,10 +6,15 @@ struct Node {
     Node* next;
 };
 
-Node* insertAtEnd(Node* head, int data){
+Node* newNode(int data){
     Node* node = new Node();
     node->data = data;
     node->next = nullptr;
+    return node;
+}
+
+Node* insertAtEnd(Node* head, int data){
+    Node* node = newNode(data);
     if(head == nullptr) return node;
 
     Node* temp = head;
@@ -23,13 +28,11 @@ Node* insertAtEnd(Node* head, int data){
 void bubbleSort(Node* head){
     if(head == nullptr) return;
 
-    bool swapped;
-    Node* last = nullptr;
-
-    do{
+    bool swapped = true;
+    while(swapped){
         swapped = false;
         Node* curr = head;
-        while(curr->next != last){
+        while(curr->next != nullptr){
             if(curr->data > curr->next->data){
                 int temp = curr->data;
                 curr->data = curr->next->data;
@@ -38,8 +41,7 @@ void bubbleSort(Node* head){
             }
             curr = curr->next;
         }
-        last = curr;
-    }while(swapped);
+    }
 }
 
 void printList(Node* head){
@@ -54,15 +56,13 @@ void printList(Node* head){
 int main()
 {
     Node* head = nullptr;
-    int arr[] = {5, 1, 4, 2, 8, 3};
-
-    for(int i = 0; i<6; i++){
-        head = insertAtEnd(head, arr[i]);
+    int arr[] = {8,5,4,3,2,1,6,9,11};
+    for(int val : arr){
+        head = insertAtEnd(head, val);
     }
 
-    printList(head);
     bubbleSort(head);
-    printList(head);
 
+    printList(head);
     return 0;
 }
